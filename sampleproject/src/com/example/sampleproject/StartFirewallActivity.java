@@ -35,6 +35,8 @@ public class StartFirewallActivity extends Activity {
 	ServerSocket ss = null;
 	ArrayList<Socket> sockets = new ArrayList<Socket>();
 	ArrayList<Socket> secureSockets = new ArrayList<Socket>();
+	ServerSocket secured=null;
+	DatabaseManager database;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class StartFirewallActivity extends Activity {
 		setContentView(R.layout.activity_start_firewall);
 		TextView ipTv = (TextView) findViewById(R.id.ipAddress);
 		try{
+			database=new DatabaseManager(this);
 			// WifiManager wifi = (WifiManager) getSystemService(WIFI_SERVICE);
 			// WifiInfo info = wifi.getConnectionInfo();
 			// int rawLocalAddress = info.getIpAddress();
@@ -76,19 +79,26 @@ public class StartFirewallActivity extends Activity {
 		TextView tv = (TextView) findViewById(R.id.textView);
 		tv.setText("Nothing from client yet");
 		new MakeConnectionServer().execute();
+		try {
+			ss = new ServerSocket(Constants.NORMAL_PORT);
+		} 
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		try{
+			secured = new ServerSocket(Constants.SECURE_PORT);
+		}
+		catch(IOException e){
+			received += Constants.SOCKET_CONNECTION_FAILED;
+			received += e.getMessage();
+		}
+
 	}
 
 	private class MakeConnectionServer extends AsyncTask<URL,Integer,Long>{
 		Resources res = getResources();
 		int success = 0;
 		protected Long doInBackground(URL...urls ){
-
-
-			try {
-				ss = new ServerSocket(Constants.NORMAL_PORT);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			int count=0;
 			while(count<Constants.THREAD_COUNT){
 				Socket s=null;
@@ -97,8 +107,7 @@ public class StartFirewallActivity extends Activity {
 				try {
 					if(s == null)
 						s=ss.accept();
-					sockets.add(s);
-
+		
 					EditText password = (EditText) findViewById(R.id.password);
 					actualPassword = password.getText().toString();
 					DataInputStream in = new DataInputStream(s.getInputStream());
@@ -118,15 +127,7 @@ public class StartFirewallActivity extends Activity {
 					sockets.add(s);
 					count++;
 					if(success==1){
-						ServerSocket secured=null;
-						try{
-							secured = new ServerSocket(Constants.SECURE_PORT);
-						}
-						catch(IOException e){
-							received += Constants.SOCKET_CONNECTION_FAILED + s.getInetAddress();
-							received += e.getMessage();
-						}
-
+						
 						Socket securedSocket = null;
 						Message msg = new Message();
 						msg.what = 0x1337;
@@ -143,7 +144,7 @@ public class StartFirewallActivity extends Activity {
 							String sentSecurePassword = sentMsg.substring(0, sentMsg.indexOf(Constants.DELIMITER));
 							String website=sentMsg.substring(sentMsg.indexOf(Constants.DELIMITER)+1);
 
-							received += Constants.CONNECTED_TO_MESSAGE + website + "\n";
+							received += Constants.CONNECTED_TO_MESSAGE + website + "from" + securedSocket.getInetAddress()+"\n";
 
 							if(!sentSecurePassword.equals(actualPassword)){
 								throw new SecurityException();
@@ -152,12 +153,13 @@ public class StartFirewallActivity extends Activity {
 							URL url = new URL(website);
 							BufferedReader buf = new BufferedReader(new InputStreamReader(url.openStream()));
 
-							String inputLine="",tempLine;
-							while((tempLine=buf.readLine())!=null){
-								inputLine += tempLine;
+							String inputLine="";
+							while((inputLine=buf.readLine())!=null){
+								secureOut.writeUTF(inputLine);
 							}
 
-							secureOut.writeUTF(Constants.SENT_MESSAGE + inputLine);
+							secureOut.writeUTF(Constants.FINISHED_SENDING);
+							securedSocket.close();
 							secureSockets.add(securedSocket);
 						}
 						catch(Exception e){
@@ -166,14 +168,17 @@ public class StartFirewallActivity extends Activity {
 						}
 						myUpdateHandler.sendMessage(msg);
 					}
-
+					s.close();
 				}
 				catch(SecurityException e){
 					received += Constants.ACCESS_DENIED +s.getInetAddress();
 				}
+				
 				catch (Exception e) {
 					received += Constants.GENERAL_EXCEPTION + s.getInetAddress();
 				}
+				Global gb= new Global();
+				gb.setLog(received);
 			}
 			return (long)count;
 		}

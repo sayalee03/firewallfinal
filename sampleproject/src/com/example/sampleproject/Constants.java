@@ -18,6 +18,5 @@ public class Constants {
 	public static final int SECURE_PORT = 4444;
 
 	public static final String DELIMITER="^";
-
-
+	public static final String FINISHED_SENDING="END_OF_TRANSMISSION_FROM_WEBSITE";
 }
