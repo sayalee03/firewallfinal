@@ -4,11 +4,89 @@
     android:layout_height="match_parent"
     tools:context=".AddActivity" >
 
-    <TextView
+    <EditText
+        android:id="@+id/ipaddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="36dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/addresslabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ipaddress"
+        android:layout_toLeftOf="@+id/ipaddress"
+        android:text="IP Address"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/sitelabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/addresslabel"
+        android:layout_below="@+id/ipaddress"
+        android:layout_marginTop="38dp"
+        android:text="Website "
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/website"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/sitelabel"
+        android:layout_alignBottom="@+id/sitelabel"
+        android:layout_toRightOf="@+id/addresslabel"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/sitelabel"
+        android:layout_below="@+id/website"
+        android:layout_marginTop="34dp"
+        android:text="Action"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textView1"
+        android:layout_toRightOf="@+id/addresslabel"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/addrulebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/action"
+        android:layout_below="@+id/action"
+        android:layout_marginTop="26dp"
+        android:onClick="@string/addRule"
+        android:text="AddRule" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addrulebutton"
+        android:layout_marginTop="34dp"
+        android:layout_toRightOf="@+id/addresslabel"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignTop="@+id/textView"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

@@ -1,16 +1,118 @@
 package com.example.sampleproject;
 
-import android.os.Bundle;
-import android.app.Activity;
-import android.view.Menu;
+import java.util.ArrayList;
+import java.util.Iterator;
 
-public class DeleteActivity extends Activity {
+import android.app.AlertDialog;
+import android.app.ListActivity;
+import android.content.DialogInterface;
+import android.database.sqlite.SQLiteException;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+public class DeleteActivity extends ListActivity {
+	private ArrayList<String> results = new ArrayList<String>();
+	DatabaseManager db;
+	Rule rule;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_delete);
+
+		ProgressBar progressBar = new ProgressBar(this);
+		progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+		progressBar.setIndeterminate(true);
+		getListView().setEmptyView(progressBar);
+
+		// Must add the progress bar to the root of the layout
+		ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+		root.addView(progressBar);
+		openAndQueryDatabase();
+
+		displayResultList();
 	}
+
+	private void displayResultList() {
+		TextView tView = new TextView(this);
+		tView.setText("This data is retrieved from the database and only 4 " +
+				"of the results are displayed");
+		getListView().addHeaderView(tView);
+
+		setListAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, results));
+		getListView().setTextFilterEnabled(true);
+		getListView().setClickable(true);
+
+		/*getListView().setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+			    // When clicked, show a toast with the TextView text
+			    Toast.makeText(getApplicationContext(),
+				((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+			}
+		});*/
+
+		getListView().setOnItemClickListener( new OnItemClickListener() { 
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				/*Toast.makeText(getApplicationContext(),
+						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+				Intent i = new Intent(UpdateActivity.this,DoUpdateActivity.class);
+				startActivity(i);*/
+				rule= new Rule();
+				rule = (Rule) getListView().getAdapter().getItem(position);
+			
+				db = new DatabaseManager(DeleteActivity.this);
+				AlertDialog.Builder builder = new AlertDialog.Builder(DeleteActivity.this);
+				builder.setCancelable(true);
+				builder.setTitle("Confirm");
+				builder.setMessage("Do you want to delete this rule?");
+				builder.setInverseBackgroundForced(true);
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Boolean Status= db.deleteRule(rule);
+						
+					}
+				});
+				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+				AlertDialog alert = builder.create();
+				alert.show();
+			}
+		});   
+	}
+
+	private void openAndQueryDatabase(){
+		try{
+			DatabaseManager db = new DatabaseManager(this);
+			ArrayList<Rule> allRules = db.getAllRows();
+			Iterator<Rule> itr= allRules.iterator();
+
+			while(itr.hasNext()){
+				Rule temp = itr.next();
+				String s= temp.getIpAddress()+ temp.getWebsiteAddress()+ temp.getAction();
+				results.add(s);
+			}
+		}catch(SQLiteException se){
+			Log.e(getClass().getSimpleName(), "Could not create or Open the database");
+		}
+	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
