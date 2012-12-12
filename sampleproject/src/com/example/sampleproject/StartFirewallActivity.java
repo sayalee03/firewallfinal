@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -37,6 +38,7 @@ public class StartFirewallActivity extends Activity {
 	ArrayList<Socket> secureSockets = new ArrayList<Socket>();
 	ServerSocket secured=null;
 	DatabaseManager database;
+	Global gb= new Global();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,13 +103,14 @@ public class StartFirewallActivity extends Activity {
 		protected Long doInBackground(URL...urls ){
 			int count=0;
 			while(count<Constants.THREAD_COUNT){
+				
 				Socket s=null;
 				Message m = new Message();
 				m.what = 0x1337;
 				try {
 					if(s == null)
 						s=ss.accept();
-		
+					
 					EditText password = (EditText) findViewById(R.id.password);
 					actualPassword = password.getText().toString();
 					DataInputStream in = new DataInputStream(s.getInputStream());
@@ -143,7 +146,22 @@ public class StartFirewallActivity extends Activity {
 							String sentMsg = secureIn.readUTF();
 							String sentSecurePassword = sentMsg.substring(0, sentMsg.indexOf(Constants.DELIMITER));
 							String website=sentMsg.substring(sentMsg.indexOf(Constants.DELIMITER)+1);
-
+							String clientIp =securedSocket.getInetAddress().toString();
+							
+							/*Rule searchRule = new Rule();
+							searchRule.setIpAddress(clientIp);
+							searchRule.setWebsiteAddress(website);
+							ArrayList<Rule> searchResults = database.selectRules(searchRule);
+							
+							if(searchResults.size()==0){
+								throw new SecurityException(Constants.SECURITY_EXCEPTION);
+							}
+							
+							Rule result = searchResults.get(0);
+							if(!(result.getIpAddress().equals(clientIp) && result.getAction().equalsIgnoreCase(result.getAction()))){
+								throw new SecurityException(Constants.SECURITY_EXCEPTION);
+							}*/
+							
 							received += Constants.CONNECTED_TO_MESSAGE + website + "from" + securedSocket.getInetAddress()+"\n";
 
 							if(!sentSecurePassword.equals(actualPassword)){
@@ -177,8 +195,7 @@ public class StartFirewallActivity extends Activity {
 				catch (Exception e) {
 					received += Constants.GENERAL_EXCEPTION + s.getInetAddress();
 				}
-				Global gb= new Global();
-				gb.setLog(received);
+				Log.i("Start Firewall", received);
 			}
 			return (long)count;
 		}

@@ -1,5 +1,9 @@
 package com.example.sampleproject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,10 +15,20 @@ public class LogActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_log);
-		Global gb=new Global();
-		String log=gb.getLog();
-		TextView logTV = (TextView) findViewById(R.id.displaylog);
-		logTV.setText(log);
+		try {
+		      Process process = Runtime.getRuntime().exec("logcat -I");
+		      BufferedReader bufferedReader = new BufferedReader(
+		      new InputStreamReader(process.getInputStream()));
+		                       
+		      StringBuilder log=new StringBuilder();
+		      String line;
+		      while ((line = bufferedReader.readLine()) != null) {
+		        log.append(line);
+		      }
+		      TextView tv = (TextView)findViewById(R.id.textView1);
+		      tv.setText(log.toString());
+		    } catch (IOException e) {
+		    }
 	}
 	
 	

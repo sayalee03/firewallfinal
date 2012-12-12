@@ -15,12 +15,12 @@ public class DatabaseManager {
 	private SQLiteDatabase db;
 	private final String DB_NAME="database_name";
 	private final int DB_VERSION=5;
-	
+
 	private final String TABLE_NAME="database_table";
 	private final String TABLE_ROW_IP="table_row_ip";
 	//primary key set as auto increment
 	private final String TABLE_ROW_ID="id";
-	
+
 	private final String TABLE_ROW_Site="table_row_two";
 	private final String TABLE_ROW_Action="table_row_rule";
 	private final String TABLE_ROW_Port="table_row_port";
@@ -30,14 +30,14 @@ public class DatabaseManager {
 	public static final String TAG="delete";
 	//public static final String RETRIEVE="first value";
 	//public static final String GET="second value";
-	
+
 	public DatabaseManager(Context context)
 	{
 		this.context=context;
 		CustomSQLiteOpenHelper helper=new CustomSQLiteOpenHelper(context);
 		this.db=helper.getWritableDatabase();
 	}
-	
+
 	private class CustomSQLiteOpenHelper extends SQLiteOpenHelper
 	{
 		public CustomSQLiteOpenHelper(Context context)
@@ -47,16 +47,16 @@ public class DatabaseManager {
 		public void onCreate(SQLiteDatabase db)
 		{
 			String newQuery="create table " + 
-							TABLE_NAME + 
-							" (" + 
-							TABLE_ROW_ID + " integer primary key autoincrement not null," +
-							TABLE_ROW_IP + " text," + 
-							TABLE_ROW_Site + " text," +
-							TABLE_ROW_Action + " text," +
-							TABLE_ROW_Port + " integer," + 
-							TABLE_ROW_CTIME + " long," +
-							TABLE_ROW_UTIME + " long" +
-							");";
+					TABLE_NAME + 
+					" (" + 
+					TABLE_ROW_ID + " integer primary key autoincrement not null," +
+					TABLE_ROW_IP + " text," + 
+					TABLE_ROW_Site + " text," +
+					TABLE_ROW_Action + " text," +
+					TABLE_ROW_Port + " integer," + 
+					TABLE_ROW_CTIME + " long," +
+					TABLE_ROW_UTIME + " long" +
+					");";
 			db.execSQL(newQuery);
 			String select="select * from " + TABLE_NAME;
 			db.execSQL(select);
@@ -67,9 +67,28 @@ public class DatabaseManager {
 			onCreate(db);
 		}
 	}	
-	
-	public void selectRules(String ipAddress, String website){
-		Cursor c=db.rawQuery("select * from " + TABLE_NAME,null);
+
+	public ArrayList<Rule> selectRules(Rule searchRule){
+
+		ArrayList<Rule> output = new ArrayList<Rule>();
+		String ipAddress = searchRule.getIpAddress();
+		String websiteAddr = searchRule.getWebsiteAddress();
+
+		String query = "SELECT * FROM " + TABLE_NAME + " where " + TABLE_ROW_IP + "=" + ipAddress + " AND " + TABLE_ROW_Site + "=" + websiteAddr;
+		
+
+		Cursor c=db.rawQuery(query  ,null);
+		if(c!=null){
+			if(c.moveToFirst()){
+				do{
+					Rule currentRule = new Rule();
+					currentRule.setIpAddress(c.getString(c.getColumnIndex(TABLE_ROW_IP)));
+					currentRule.setWebsiteAddress(c.getString(c.getColumnIndex(TABLE_ROW_Site)));
+					currentRule.setAction(c.getString(c.getColumnIndex(TABLE_ROW_Action)));
+					output.add(currentRule);
+				}while(c.moveToNext());
+			}
+		}	
+		return output;
 	}
-	
 }
