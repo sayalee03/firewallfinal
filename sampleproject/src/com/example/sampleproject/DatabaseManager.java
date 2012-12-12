@@ -91,4 +91,76 @@ public class DatabaseManager {
 		}	
 		return output;
 	}
+	public boolean addRule(Rule obj)
+	{
+		//int id=obj.getId();
+		
+		String address=obj.getIpAddress();
+		String site=obj.getWebsiteAddress();
+		String action=obj.getAction();
+		String ctime=obj.getCreatedTime();
+		String utime=obj.getUpdateTime();
+		ContentValues values=new ContentValues();
+		values.put(TABLE_ROW_IP, address);
+		values.put(TABLE_ROW_Site,site);
+		values.put(TABLE_ROW_Action, action);
+		values.put(TABLE_ROW_CTIME, ctime);
+		values.put(TABLE_ROW_UTIME, utime);
+		try
+		{
+			db.insert(TABLE_NAME,null,values);
+			 return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+	public boolean deleteRule(Rule obj)
+	{
+		long id=obj.getId();
+		try
+		{
+			db.delete(TABLE_NAME, TABLE_ROW_ID + "=" + id,null);
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+	public ArrayList<Rule> getAllRows()
+	{
+		Cursor cursor;
+		ArrayList<Rule> rule=new ArrayList();
+		try
+		{
+					cursor=db.query(
+					TABLE_NAME, new String[]{TABLE_ROW_ID,TABLE_ROW_IP,TABLE_ROW_Site,TABLE_ROW_Action,TABLE_ROW_Port,TABLE_ROW_CTIME,TABLE_ROW_UTIME}, 
+					null, null, null, null, null);
+			cursor.moveToFirst();
+			if(!cursor.isAfterLast())
+			{
+				do
+				{
+					Rule currentObj=new Rule();
+					currentObj.setId(Integer.parseInt(cursor.getString(0)));
+					currentObj.setIpAddress(cursor.getString(1));
+					currentObj.setWebsiteAddress(cursor.getString(2));
+					currentObj.setAction(cursor.getString(3));
+					currentObj.setPort(Integer.parseInt(cursor.getString(4)));
+					currentObj.setCreatedTime(cursor.getString(5));
+					currentObj.setUpdateTime(cursor.getString(6));
+					
+					rule.add(currentObj);
+					
+				}while(cursor.moveToNext());			
+			}
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+		return rule;
+	}
 }
