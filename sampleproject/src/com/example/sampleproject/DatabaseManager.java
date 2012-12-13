@@ -54,8 +54,8 @@ public class DatabaseManager {
 					TABLE_ROW_Site + " text," +
 					TABLE_ROW_Action + " text," +
 					TABLE_ROW_Port + " integer," + 
-					TABLE_ROW_CTIME + " long," +
-					TABLE_ROW_UTIME + " long" +
+					TABLE_ROW_CTIME + " text," +
+					TABLE_ROW_UTIME + " text" +
 					");";
 			db.execSQL(newQuery);
 			String select="select * from " + TABLE_NAME;
@@ -100,12 +100,33 @@ public class DatabaseManager {
 		String action=obj.getAction();
 		String ctime=obj.getCreatedTime();
 		String utime=obj.getUpdateTime();
+		int port=obj.getPort();
+		
 		ContentValues values=new ContentValues();
-		values.put(TABLE_ROW_IP, address);
-		values.put(TABLE_ROW_Site,site);
-		values.put(TABLE_ROW_Action, action);
-		values.put(TABLE_ROW_CTIME, ctime);
-		values.put(TABLE_ROW_UTIME, utime);
+		if(address!=null)
+			values.put(TABLE_ROW_IP, address);
+		else 
+			return false;
+		if(site!=null)
+			values.put(TABLE_ROW_Site,site);
+		else
+			return false;
+		if(action!=null)
+			values.put(TABLE_ROW_Action, action);
+		else
+			return false;
+		if(ctime==null)
+			values.put(TABLE_ROW_CTIME, "");
+		else
+			return false;
+		if(utime==null)
+			values.put(TABLE_ROW_UTIME, "");
+		else
+			return false;
+		if(Integer.toString(port)==null)
+			values.put(TABLE_ROW_Port, 0);
+		else	
+			return false;
 		try
 		{
 			db.insert(TABLE_NAME,null,values);
@@ -135,8 +156,8 @@ public class DatabaseManager {
 		ArrayList<Rule> rule=new ArrayList();
 		try
 		{
-					cursor=db.query(
-					TABLE_NAME, new String[]{TABLE_ROW_ID,TABLE_ROW_IP,TABLE_ROW_Site,TABLE_ROW_Action,TABLE_ROW_Port,TABLE_ROW_CTIME,TABLE_ROW_UTIME}, 
+				cursor=db.query(
+				TABLE_NAME, new String[]{TABLE_ROW_ID,TABLE_ROW_IP,TABLE_ROW_Site,TABLE_ROW_Action,TABLE_ROW_Port,TABLE_ROW_CTIME,TABLE_ROW_UTIME}, 
 					null, null, null, null, null);
 			cursor.moveToFirst();
 			if(!cursor.isAfterLast())
@@ -162,5 +183,32 @@ public class DatabaseManager {
 			return null;
 		}
 		return rule;
+	}
+	public boolean updateRule(Rule obj)
+	{
+		long id=obj.getId();
+		String address=obj.getIpAddress();
+		String site=obj.getWebsiteAddress();
+		String action=obj.getAction();
+		String ctime=obj.getCreatedTime();
+		String utime=obj.getUpdateTime();
+		int port =obj.getPort();
+		ContentValues content=new ContentValues();
+		content.put(TABLE_ROW_IP, address);
+		content.put(TABLE_ROW_Site, site);
+		content.put(TABLE_ROW_Action, action);
+		content.put(TABLE_ROW_CTIME, ctime);
+		content.put(TABLE_ROW_UTIME,utime);
+		content.put(TABLE_ROW_Port, 0);
+		
+		//String where=""
+		try{
+		int num_rows_updated=db.update(TABLE_NAME, content, "TABLE_ROW_ID=" + id, null);
+		return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 }
