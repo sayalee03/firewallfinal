@@ -103,14 +103,14 @@ public class StartFirewallActivity extends Activity {
 		protected Long doInBackground(URL...urls ){
 			int count=0;
 			while(count<Constants.THREAD_COUNT){
-				
+
 				Socket s=null;
 				Message m = new Message();
 				m.what = 0x1337;
 				try {
 					if(s == null)
 						s=ss.accept();
-					
+
 					EditText password = (EditText) findViewById(R.id.password);
 					actualPassword = password.getText().toString();
 					DataInputStream in = new DataInputStream(s.getInputStream());
@@ -130,10 +130,11 @@ public class StartFirewallActivity extends Activity {
 					sockets.add(s);
 					count++;
 					if(success==1){
-						
+
 						Socket securedSocket = null;
 						Message msg = new Message();
 						msg.what = 0x1337;
+						int error=0;
 						try{
 							if(securedSocket==null)
 								securedSocket = secured.accept();
@@ -147,39 +148,66 @@ public class StartFirewallActivity extends Activity {
 							String sentSecurePassword = sentMsg.substring(0, sentMsg.indexOf(Constants.DELIMITER));
 							String website=sentMsg.substring(sentMsg.indexOf(Constants.DELIMITER)+1);
 							String clientIp =securedSocket.getInetAddress().toString();
-							
+
+							if(clientIp.startsWith("/")){
+								clientIp = clientIp.substring(1);
+							}
+
 							Rule searchRule = new Rule();
 							searchRule.setIpAddress(clientIp);
 							searchRule.setWebsiteAddress(website);
 							ArrayList<Rule> searchResults = database.selectRules(searchRule);
-							
+
 							if(searchResults.size()==0){
-								throw new SecurityException(Constants.SECURITY_EXCEPTION);
-							}
-							
-							Rule result = searchResults.get(0);
-							if(!(result.getIpAddress().equals(clientIp) && result.getAction().equalsIgnoreCase(result.getAction()))){
-								throw new SecurityException(Constants.SECURITY_EXCEPTION);
-							}
-							
-							received += Constants.CONNECTED_TO_MESSAGE + website + "from" + securedSocket.getInetAddress()+"\n";
-
-							if(!sentSecurePassword.equals(actualPassword)){
-								throw new SecurityException();
+								error = Constants.SECURITY_ERROR;
 							}
 
-							URL url = new URL(website);
-							BufferedReader buf = new BufferedReader(new InputStreamReader(url.openStream()));
-
-							String inputLine="";
-							while((inputLine=buf.readLine())!=null){
-								secureOut.writeUTF(inputLine);
+							boolean allowed = false;
+							for(int i=0;i<searchResults.size();i++){
+								Rule currentResult = searchResults.get(i);
+								if(currentResult.getIpAddress().equals("*") && currentResult.getWebsiteAddress().equals("*") && currentResult.getAction().equals("accept")){
+									allowed = true;
+									break;
+								}
+								if(currentResult.getIpAddress().equals(clientIp) && currentResult.getWebsiteAddress().equals("*") && currentResult.getAction().equals("accept")){
+									allowed = true;
+									break;
+								}
+								if(currentResult.getIpAddress().equals("*") && currentResult.getWebsiteAddress().equals(website) && currentResult.getAction().equals("accept")){
+									allowed = true;
+									break;
+								}
+								if(currentResult.getIpAddress().equals(clientIp) && currentResult.getWebsiteAddress().equals(website) && currentResult.getAction().equals("accept")){
+									allowed = true;
+									break;
+								}
+								
 							}
 
-							secureOut.writeUTF(Constants.FINISHED_SENDING);
+							if(error !=Constants.SECURITY_ERROR && allowed){
+								received += Constants.CONNECTED_TO_MESSAGE + website + "from" + securedSocket.getInetAddress()+"\n";
+
+								if(!sentSecurePassword.equals(actualPassword)){
+									throw new SecurityException();
+								}
+
+								URL url = new URL(website);
+								BufferedReader buf = new BufferedReader(new InputStreamReader(url.openStream()));
+
+								String inputLine="";
+								while((inputLine=buf.readLine())!=null){
+									secureOut.writeUTF(inputLine);
+								}
+
+								secureOut.writeUTF(Constants.FINISHED_SENDING);
+							}
+							else
+								secureOut.writeUTF(Constants.SECURITY_EXCEPTION);
+
 							securedSocket.close();
 							secureSockets.add(securedSocket);
 						}
+
 						catch(Exception e){
 							received += "Error while writing data";
 							received += e.getMessage();
@@ -191,7 +219,7 @@ public class StartFirewallActivity extends Activity {
 				catch(SecurityException e){
 					received += Constants.ACCESS_DENIED +s.getInetAddress();
 				}
-				
+
 				catch (Exception e) {
 					received += Constants.GENERAL_EXCEPTION + s.getInetAddress();
 				}

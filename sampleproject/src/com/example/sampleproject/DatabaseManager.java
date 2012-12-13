@@ -74,7 +74,8 @@ public class DatabaseManager {
 		String ipAddress = searchRule.getIpAddress();
 		String websiteAddr = searchRule.getWebsiteAddress();
 
-		String query = "SELECT * FROM " + TABLE_NAME + " where " + TABLE_ROW_IP + "=" + ipAddress + " AND " + TABLE_ROW_Site + "=" + websiteAddr;
+		String query = "SELECT * FROM " + TABLE_NAME + " where (" + TABLE_ROW_IP + "='" + ipAddress + "' OR " + TABLE_ROW_IP + "='*') " +
+				"AND (" + TABLE_ROW_Site + "='" + websiteAddr +"' OR " + TABLE_ROW_Site + "='*')";
 		
 
 		Cursor c=db.rawQuery(query  ,null);

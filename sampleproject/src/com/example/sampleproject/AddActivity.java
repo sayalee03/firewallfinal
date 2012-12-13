@@ -70,6 +70,8 @@ public class AddActivity extends Activity {
 				}
 
 				rule.setIpAddress(ipaddress);
+				if(!website.startsWith("http"))
+					website = "http://" + website;
 				rule.setWebsiteAddress(website);
 				rule.setAction(action);
 
