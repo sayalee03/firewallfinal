@@ -22,8 +22,7 @@
     <string name="addRule">addRule</string>
     <string name="updateRule">updateRule</string>
     <string name="CONNECTION_FROM_MESSAGE">Connection from IP Address</string>
-    <string name="INVALID_IPADDRESS">IPAddress entered is wrong!</string>
-    <string name="INVALID_WEBSITE">Website entered is wrong!</string>
+    <string name="INVALID_IPADDRESS_WEBSITE">Enter correct ipaddress and website!</string>
     <string name="title_activity_do_update">DoUpdateActivity</string>
 
 </resources>
