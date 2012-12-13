@@ -38,8 +38,7 @@ public class ViewActivity extends ListActivity {
 
 	private void displayResultList() {
 		TextView tView = new TextView(this);
-		tView.setText("This data is retrieved from the database and only 4 " +
-				"of the results are displayed");
+		tView.setText("Rules in database");
 		getListView().addHeaderView(tView);
 
 		setListAdapter(new ArrayAdapter<String>(this,
@@ -68,7 +67,7 @@ public class ViewActivity extends ListActivity {
 
 	private void openAndQueryDatabase(){
 		try{
-			DatabaseManager db = new DatabaseManager(this);
+			DatabaseManager db = new DatabaseManager(ViewActivity.this);
 			ArrayList<Rule> allRules = db.getAllRows();
 
 			Iterator<Rule> itr= allRules.iterator();

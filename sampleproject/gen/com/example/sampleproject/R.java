@@ -20,36 +20,56 @@ public final class R {
         public static final int rules1=0x7f020006;
     }
     public static final class id {
-        public static final int button1=0x7f070002;
-        public static final int displaylog=0x7f070000;
-        public static final int ipAddress=0x7f070005;
-        public static final int menu_settings=0x7f070006;
-        public static final int password=0x7f070004;
-        public static final int textView=0x7f070001;
-        public static final int textView1=0x7f070003;
+        public static final int action=0x7f070005;
+        public static final int addresslabel=0x7f070001;
+        public static final int addrulebutton=0x7f070006;
+        public static final int button1=0x7f070013;
+        public static final int displaylog=0x7f070012;
+        public static final int editText1=0x7f07000c;
+        public static final int ipAddress=0x7f070015;
+        public static final int ipaddress=0x7f070000;
+        public static final int menu_settings=0x7f070016;
+        public static final int password=0x7f070014;
+        public static final int sitelabel=0x7f070002;
+        public static final int textView=0x7f070007;
+        public static final int textView1=0x7f070004;
+        public static final int textView2=0x7f070008;
+        public static final int textView3=0x7f070009;
+        public static final int textView4=0x7f07000a;
+        public static final int textView5=0x7f07000b;
+        public static final int textView6=0x7f07000d;
+        public static final int updateaction=0x7f070010;
+        public static final int updateipaddress=0x7f07000e;
+        public static final int updaterulebutton=0x7f070011;
+        public static final int updatewebsite=0x7f07000f;
+        public static final int website=0x7f070003;
     }
     public static final class layout {
         public static final int activity_add=0x7f030000;
         public static final int activity_android_tab_layout=0x7f030001;
         public static final int activity_delete=0x7f030002;
-        public static final int activity_log=0x7f030003;
-        public static final int activity_rules=0x7f030004;
-        public static final int activity_start_firewall=0x7f030005;
-        public static final int activity_update=0x7f030006;
-        public static final int activity_view=0x7f030007;
+        public static final int activity_do_update=0x7f030003;
+        public static final int activity_log=0x7f030004;
+        public static final int activity_rules=0x7f030005;
+        public static final int activity_start_firewall=0x7f030006;
+        public static final int activity_update=0x7f030007;
+        public static final int activity_view=0x7f030008;
     }
     public static final class menu {
         public static final int activity_add=0x7f060000;
         public static final int activity_android_tab_layout=0x7f060001;
         public static final int activity_delete=0x7f060002;
-        public static final int activity_log=0x7f060003;
-        public static final int activity_rules=0x7f060004;
-        public static final int activity_start_firewall=0x7f060005;
-        public static final int activity_update=0x7f060006;
-        public static final int activity_view=0x7f060007;
+        public static final int activity_do_update=0x7f060003;
+        public static final int activity_log=0x7f060004;
+        public static final int activity_rules=0x7f060005;
+        public static final int activity_start_firewall=0x7f060006;
+        public static final int activity_update=0x7f060007;
+        public static final int activity_view=0x7f060008;
     }
     public static final class string {
-        public static final int CONNECTION_FROM_MESSAGE=0x7f040012;
+        public static final int CONNECTION_FROM_MESSAGE=0x7f040015;
+        public static final int INVALID_IPADDRESS_WEBSITE=0x7f040016;
+        public static final int addRule=0x7f040012;
         public static final int app_name=0x7f040000;
         public static final int button_add=0x7f040004;
         public static final int button_delete=0x7f040006;
@@ -58,16 +78,19 @@ public final class R {
         public static final int firewall_here=0x7f040003;
         public static final int hello_world=0x7f04000c;
         public static final int log_here=0x7f040002;
+        public static final int main_no_items=0x7f040014;
         public static final int menu_settings=0x7f040008;
         public static final int rules_here=0x7f040001;
         public static final int startCapture=0x7f040011;
         public static final int title_activity_add=0x7f04000d;
         public static final int title_activity_delete=0x7f04000f;
+        public static final int title_activity_do_update=0x7f040017;
         public static final int title_activity_log=0x7f04000a;
         public static final int title_activity_rules=0x7f040009;
         public static final int title_activity_start_firewall=0x7f04000b;
         public static final int title_activity_update=0x7f04000e;
         public static final int title_activity_view=0x7f040010;
+        public static final int updateRule=0x7f040013;
     }
     public static final class style {
         /** 

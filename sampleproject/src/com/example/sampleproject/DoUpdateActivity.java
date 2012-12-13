@@ -18,10 +18,16 @@ import android.widget.TextView;
 
 public class DoUpdateActivity extends Activity {
 
+	int ruleid;
+	int flag=0;
+	String msg="";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_do_update);
+		Bundle extras = getIntent().getExtras();
+		ruleid = extras.getInt("id");
 	}
 
 	@Override
@@ -60,20 +66,32 @@ public class DoUpdateActivity extends Activity {
 
 
 				if(!invalidIP(ipaddress)){
-					String ipError = res.getString(R.string.INVALID_IPADDRESS);
-					throw new IllegalArgumentException(ipError);
+					String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
+					throw new IllegalArgumentException(Error);
 				}
 
 				if(!invalidSite(website)){
-					String wError = res.getString(R.string.INVALID_WEBSITE);
-					throw new IllegalArgumentException(wError);
+					String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
+					throw new IllegalArgumentException(Error);
 				}
 
 				rule.setIpAddress(ipaddress);
 				rule.setWebsiteAddress(website);
 				rule.setAction(action);
+				rule.setId(ruleid);
 
 				Boolean status = dbm.addRule(rule);
+				if(status == false){
+					AlertDialog.Builder alert = new AlertDialog.Builder(DoUpdateActivity.this);
+					alert.setMessage("Rule not updated!");
+					alert.setCancelable(true);
+					AlertDialog dialog = alert.create();
+					dialog.show();
+				}
+				if(status == true){
+					msg="Rule has been updated";
+					flag=1;
+				}
 			}
 			catch(IllegalArgumentException e){
 				error = Constants.ILLEGAL_ARGUMENT_EXCEPTION;
@@ -85,12 +103,15 @@ public class DoUpdateActivity extends Activity {
 			if(error==Constants.ILLEGAL_ARGUMENT_EXCEPTION){
 				AlertDialog.Builder alert = new AlertDialog.Builder(DoUpdateActivity.this);
 				alert.setTitle(Constants.ERROR_DIALOG);
-				String ipError = res.getString(R.string.INVALID_IPADDRESS);
-				String wError = res.getString(R.string.INVALID_WEBSITE);
-				alert.setMessage(ipError);
+				String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
+				alert.setMessage(Error);
 				alert.setCancelable(true);
 				AlertDialog dialog = alert.create();
 				dialog.show();
+			}
+			if(flag==1){
+				TextView text = (TextView) findViewById(R.id.textView4);
+				text.setText(msg);
 			}
 		}
 		

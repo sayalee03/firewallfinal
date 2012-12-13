@@ -81,7 +81,14 @@ public class DeleteActivity extends ListActivity {
 				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						Boolean Status= db.deleteRule(rule);
+						Boolean status= db.deleteRule(rule);
+						if(status == false){
+							AlertDialog.Builder alert = new AlertDialog.Builder(DeleteActivity.this);
+							alert.setMessage("Rule not deleted!");
+							alert.setCancelable(true);
+							AlertDialog newdialog = alert.create();
+							newdialog.show();
+						}
 						
 					}
 				});

@@ -61,16 +61,19 @@ public class UpdateActivity extends ListActivity {
 
 		getListView().setOnItemClickListener( new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Rule rule= new Rule();
+				rule = (Rule) getListView().getAdapter().getItem(position);
+				int ruleid= rule.getId();
 				Toast.makeText(getApplicationContext(),
 						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(UpdateActivity.this,DoUpdateActivity.class);
+				i.putExtra("id", ruleid);
 				startActivity(i);
 			}
 		});   
 	}
 
 	private void openAndQueryDatabase(){
-		int i=0;
 		try{
 			DatabaseManager db = new DatabaseManager(this);
 			ArrayList<Rule> allRules = db.getAllRows();
