@@ -23,14 +23,14 @@ public class ViewActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view);
 
-		ProgressBar progressBar = new ProgressBar(this);
-		progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
-		progressBar.setIndeterminate(true);
-		getListView().setEmptyView(progressBar);
-
-		// Must add the progress bar to the root of the layout
-		ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
-		root.addView(progressBar);
+//		ProgressBar progressBar = new ProgressBar(this);
+//		progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));
+//		progressBar.setIndeterminate(true);
+//		getListView().setEmptyView(progressBar);
+//
+//		// Must add the progress bar to the root of the layout
+//		ViewGroup root = (ViewGroup) findViewById(android.R.id.content);
+//		root.addView(progressBar);
 		openAndQueryDatabase();
 
 		displayResultList();
@@ -44,25 +44,6 @@ public class ViewActivity extends ListActivity {
 		setListAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_list_item_1, results));
 		getListView().setTextFilterEnabled(true);
-		//getListView().setClickable(true);
-
-		/*getListView().setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-			    // When clicked, show a toast with the TextView text
-			    Toast.makeText(getApplicationContext(),
-				((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-			}
-		});*/
-
-		/*getListView().setOnItemClickListener( new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Toast.makeText(getApplicationContext(),
-						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
-	//			Intent i = new Intent(UpdateActivity.this,DoUpdateActivity.class);
-		//		startActivity(i);
-			}
-		}); */   
 	} 
 
 	private void openAndQueryDatabase(){
@@ -74,7 +55,7 @@ public class ViewActivity extends ListActivity {
 
 			while(itr.hasNext()){
 				Rule temp = itr.next();
-				String s= temp.getIpAddress()+ temp.getWebsiteAddress()+ temp.getAction();
+				String s= temp.getIpAddress()+"\t"+ temp.getWebsiteAddress()+"\t"+ temp.getAction();
 				results.add(s);
 			}
 
@@ -89,5 +70,4 @@ public class ViewActivity extends ListActivity {
 		getMenuInflater().inflate(R.menu.activity_view, menu);
 		return true;
 	}
-
 }

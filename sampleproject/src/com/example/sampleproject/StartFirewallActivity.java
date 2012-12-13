@@ -148,7 +148,7 @@ public class StartFirewallActivity extends Activity {
 							String website=sentMsg.substring(sentMsg.indexOf(Constants.DELIMITER)+1);
 							String clientIp =securedSocket.getInetAddress().toString();
 							
-							/*Rule searchRule = new Rule();
+							Rule searchRule = new Rule();
 							searchRule.setIpAddress(clientIp);
 							searchRule.setWebsiteAddress(website);
 							ArrayList<Rule> searchResults = database.selectRules(searchRule);
@@ -160,7 +160,7 @@ public class StartFirewallActivity extends Activity {
 							Rule result = searchResults.get(0);
 							if(!(result.getIpAddress().equals(clientIp) && result.getAction().equalsIgnoreCase(result.getAction()))){
 								throw new SecurityException(Constants.SECURITY_EXCEPTION);
-							}*/
+							}
 							
 							received += Constants.CONNECTED_TO_MESSAGE + website + "from" + securedSocket.getInetAddress()+"\n";
 

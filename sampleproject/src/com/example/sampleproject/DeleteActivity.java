@@ -23,7 +23,7 @@ public class DeleteActivity extends ListActivity {
 	private ArrayList<String> results = new ArrayList<String>();
 	DatabaseManager db;
 	Rule rule;
-
+	ArrayList<Rule> allRules=new ArrayList<Rule>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +45,7 @@ public class DeleteActivity extends ListActivity {
 
 	private void displayResultList() {
 		TextView tView = new TextView(this);
-		tView.setText("This data is retrieved from the database and only 4 " +
-				"of the results are displayed");
+		tView.setText("Rules in the database");
 		getListView().addHeaderView(tView);
 
 		setListAdapter(new ArrayAdapter<String>(this,
@@ -69,8 +68,8 @@ public class DeleteActivity extends ListActivity {
 						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
 				Intent i = new Intent(UpdateActivity.this,DoUpdateActivity.class);
 				startActivity(i);*/
-				rule= new Rule();
-				rule = (Rule) getListView().getAdapter().getItem(position);
+				rule= allRules.get(position-1);
+				
 			
 				db = new DatabaseManager(DeleteActivity.this);
 				AlertDialog.Builder builder = new AlertDialog.Builder(DeleteActivity.this);
@@ -107,12 +106,12 @@ public class DeleteActivity extends ListActivity {
 	private void openAndQueryDatabase(){
 		try{
 			DatabaseManager db = new DatabaseManager(this);
-			ArrayList<Rule> allRules = db.getAllRows();
+			allRules = db.getAllRows();
 			Iterator<Rule> itr= allRules.iterator();
 
 			while(itr.hasNext()){
 				Rule temp = itr.next();
-				String s= temp.getIpAddress()+ temp.getWebsiteAddress()+ temp.getAction();
+				String s= temp.getIpAddress()+"\t"+ temp.getWebsiteAddress()+"\t"+ temp.getAction();
 				results.add(s);
 			}
 		}catch(SQLiteException se){

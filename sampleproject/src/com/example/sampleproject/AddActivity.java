@@ -76,11 +76,8 @@ public class AddActivity extends Activity {
 				Boolean status = dbm.addRule(rule);
 				
 				if(status == false){
-					AlertDialog.Builder alert = new AlertDialog.Builder(AddActivity.this);
-					alert.setMessage("Rule not added!");
-					alert.setCancelable(true);
-					AlertDialog dialog = alert.create();
-					dialog.show();
+					msg="Rule not added!";
+					flag=0;
 				}
 				if(status == true){
 					msg="Rule has been added";
@@ -100,6 +97,13 @@ public class AddActivity extends Activity {
 				alert.setTitle(Constants.ERROR_DIALOG);
 				String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
 				alert.setMessage(Error);
+				alert.setCancelable(true);
+				AlertDialog dialog = alert.create();
+				dialog.show();
+			}
+			if(flag==0){
+				AlertDialog.Builder alert = new AlertDialog.Builder(AddActivity.this);
+				alert.setMessage(msg);
 				alert.setCancelable(true);
 				AlertDialog dialog = alert.create();
 				dialog.show();

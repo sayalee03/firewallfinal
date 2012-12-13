@@ -94,39 +94,43 @@ public class DatabaseManager {
 	public boolean addRule(Rule obj)
 	{
 		//int id=obj.getId();
+		String address,site,action,ctime,utime;
+		int port;
+		if(obj.getIpAddress()!=null)
+			address = obj.getIpAddress();
+		else
+			return false;
 		
-		String address=obj.getIpAddress();
-		String site=obj.getWebsiteAddress();
-		String action=obj.getAction();
-		String ctime=obj.getCreatedTime();
-		String utime=obj.getUpdateTime();
-		int port=obj.getPort();
-		
-		ContentValues values=new ContentValues();
-		if(address!=null)
-			values.put(TABLE_ROW_IP, address);
+		if(obj.getWebsiteAddress()!=null)
+			site=obj.getWebsiteAddress();
 		else 
 			return false;
-		if(site!=null)
-			values.put(TABLE_ROW_Site,site);
+		
+		if(obj.getAction()!=null)
+			action = obj.getAction();
 		else
 			return false;
-		if(action!=null)
-			values.put(TABLE_ROW_Action, action);
+		
+		if(obj.getCreatedTime()!=null)
+			ctime = obj.getCreatedTime();
 		else
-			return false;
-		if(ctime==null)
-			values.put(TABLE_ROW_CTIME, "");
+			ctime = "";
+		
+		if(obj.getUpdateTime()!=null)
+			utime = obj.getUpdateTime();
 		else
-			return false;
-		if(utime==null)
-			values.put(TABLE_ROW_UTIME, "");
-		else
-			return false;
-		if(Integer.toString(port)==null)
-			values.put(TABLE_ROW_Port, 0);
-		else	
-			return false;
+			utime = "";
+		
+		port = obj.getPort();	
+		ContentValues values=new ContentValues();
+		
+		values.put(TABLE_ROW_IP, address);
+		values.put(TABLE_ROW_Site,site);
+		values.put(TABLE_ROW_Action, action);
+		values.put(TABLE_ROW_CTIME, "");
+		values.put(TABLE_ROW_UTIME, "");
+		values.put(TABLE_ROW_Port, 0);
+		
 		try
 		{
 			db.insert(TABLE_NAME,null,values);
@@ -186,24 +190,47 @@ public class DatabaseManager {
 	}
 	public boolean updateRule(Rule obj)
 	{
-		long id=obj.getId();
-		String address=obj.getIpAddress();
-		String site=obj.getWebsiteAddress();
-		String action=obj.getAction();
-		String ctime=obj.getCreatedTime();
-		String utime=obj.getUpdateTime();
-		int port =obj.getPort();
-		ContentValues content=new ContentValues();
-		content.put(TABLE_ROW_IP, address);
-		content.put(TABLE_ROW_Site, site);
-		content.put(TABLE_ROW_Action, action);
-		content.put(TABLE_ROW_CTIME, ctime);
-		content.put(TABLE_ROW_UTIME,utime);
-		content.put(TABLE_ROW_Port, 0);
+		String address,site,action,ctime,utime;
+		int port,id;
+		id = obj.getId();
+		if(obj.getIpAddress()!=null)
+			address = obj.getIpAddress();
+		else
+			return false;
+		
+		if(obj.getWebsiteAddress()!=null)
+			site=obj.getWebsiteAddress();
+		else 
+			return false;
+		
+		if(obj.getAction()!=null)
+			action = obj.getAction();
+		else
+			return false;
+		
+		if(obj.getCreatedTime()!=null)
+			ctime = obj.getCreatedTime();
+		else
+			ctime = "";
+		
+		if(obj.getUpdateTime()!=null)
+			utime = obj.getUpdateTime();
+		else
+			utime = "";
+		
+		port = obj.getPort();	
+		ContentValues values=new ContentValues();
+		
+		values.put(TABLE_ROW_IP, address);
+		values.put(TABLE_ROW_Site,site);
+		values.put(TABLE_ROW_Action, action);
+		values.put(TABLE_ROW_CTIME, "");
+		values.put(TABLE_ROW_UTIME, "");
+		values.put(TABLE_ROW_Port, 0);
 		
 		//String where=""
 		try{
-		int num_rows_updated=db.update(TABLE_NAME, content, "TABLE_ROW_ID=" + id, null);
+		int num_rows_updated=db.update(TABLE_NAME, values, TABLE_ROW_ID+ "=" + id, null);
 		return true;
 		}
 		catch(Exception e)

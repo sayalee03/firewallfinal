@@ -80,13 +80,10 @@ public class DoUpdateActivity extends Activity {
 				rule.setAction(action);
 				rule.setId(ruleid);
 
-				Boolean status = dbm.addRule(rule);
+				Boolean status = dbm.updateRule(rule);
 				if(status == false){
-					AlertDialog.Builder alert = new AlertDialog.Builder(DoUpdateActivity.this);
-					alert.setMessage("Rule not updated!");
-					alert.setCancelable(true);
-					AlertDialog dialog = alert.create();
-					dialog.show();
+					msg="Rule not updated!";
+					flag=0;
 				}
 				if(status == true){
 					msg="Rule has been updated";
@@ -109,9 +106,18 @@ public class DoUpdateActivity extends Activity {
 				AlertDialog dialog = alert.create();
 				dialog.show();
 			}
+			
 			if(flag==1){
 				TextView text = (TextView) findViewById(R.id.textView4);
 				text.setText(msg);
+			}
+			
+			if(flag==0){
+				AlertDialog.Builder alert = new AlertDialog.Builder(DoUpdateActivity.this);
+				alert.setMessage(msg);
+				alert.setCancelable(true);
+				AlertDialog dialog = alert.create();
+				dialog.show();
 			}
 		}
 		

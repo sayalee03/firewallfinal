@@ -21,6 +21,8 @@ import android.widget.Toast;
 
 public class UpdateActivity extends ListActivity {
 	private ArrayList<String> results = new ArrayList<String>();
+	ArrayList<Rule> allRules=new ArrayList<Rule>();
+	Rule rule;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +43,7 @@ public class UpdateActivity extends ListActivity {
 
 	private void displayResultList() {
 		TextView tView = new TextView(this);
-		tView.setText("This data is retrieved from the database and only 4 " +
-				"of the results are displayed");
+		tView.setText("Rules in the database");
 		getListView().addHeaderView(tView);
 
 		setListAdapter(new ArrayAdapter<String>(this,
@@ -61,8 +62,7 @@ public class UpdateActivity extends ListActivity {
 
 		getListView().setOnItemClickListener( new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Rule rule= new Rule();
-				rule = (Rule) getListView().getAdapter().getItem(position);
+				rule= allRules.get(position-1);
 				int ruleid= rule.getId();
 				Toast.makeText(getApplicationContext(),
 						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
@@ -76,12 +76,12 @@ public class UpdateActivity extends ListActivity {
 	private void openAndQueryDatabase(){
 		try{
 			DatabaseManager db = new DatabaseManager(this);
-			ArrayList<Rule> allRules = db.getAllRows();
+			allRules = db.getAllRows();
 			Iterator<Rule> itr= allRules.iterator();
 			
 			while(itr.hasNext()){
 			 Rule temp = itr.next();
-			 String s= temp.getIpAddress()+ temp.getWebsiteAddress()+ temp.getAction();
+			 String s= temp.getIpAddress()+"\t"+ temp.getWebsiteAddress()+"\t"+ temp.getAction();
 			 results.add(s);
 			}
 		}catch(SQLiteException se){
