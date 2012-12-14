@@ -55,7 +55,7 @@ public class ViewActivity extends ListActivity {
 
 			while(itr.hasNext()){
 				Rule temp = itr.next();
-				String s= temp.getIpAddress()+"\t"+ temp.getWebsiteAddress()+"\t"+ temp.getAction();
+				String s= temp.getIpAddress()+"\t\t"+ temp.getWebsiteAddress()+"\t\t"+ temp.getAction();
 				results.add(s);
 			}
 

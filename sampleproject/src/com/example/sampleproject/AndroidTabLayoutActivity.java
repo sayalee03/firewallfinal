@@ -30,15 +30,15 @@ public class AndroidTabLayoutActivity extends TabActivity {
 	    Intent rulesIntent = new Intent(this, RulesActivity.class);
 	    rulespec.setContent(rulesIntent);
 	    
-	    TabSpec logspec = tabHost.newTabSpec("Log");
+	    /*TabSpec logspec = tabHost.newTabSpec("Log");
 	    // setting Title and Icon for the Tab
 	   logspec.setIndicator("Log");
 	    Intent logIntent = new Intent(this, LogActivity.class);
-	    logspec.setContent(logIntent);
+	    logspec.setContent(logIntent);*/
 
 	    tabHost.addTab(firewallspec);	// Adding firewall tab
 	    tabHost.addTab(rulespec); // Adding rules tab
-	    tabHost.addTab(logspec);  // Adding log tab
+	    //tabHost.addTab(logspec);  // Adding log tab
 	    
 	}
 

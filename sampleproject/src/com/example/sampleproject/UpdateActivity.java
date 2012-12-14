@@ -64,8 +64,11 @@ public class UpdateActivity extends ListActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				rule= allRules.get(position-1);
 				int ruleid= rule.getId();
+				/*String s= rule.getIpAddress()+"\t\t"+ rule.getWebsiteAddress()+"\t\t"+ rule.getAction();
+				TextView text = (TextView) findViewById(R.id.textView7);
+				text.setText(s);*/
 				Toast.makeText(getApplicationContext(),
-						((TextView) view).getText(), Toast.LENGTH_SHORT).show();
+						((TextView) view).getText(), Toast.LENGTH_LONG).show();
 				Intent i = new Intent(UpdateActivity.this,DoUpdateActivity.class);
 				i.putExtra("id", ruleid);
 				startActivity(i);
@@ -81,7 +84,7 @@ public class UpdateActivity extends ListActivity {
 			
 			while(itr.hasNext()){
 			 Rule temp = itr.next();
-			 String s= temp.getIpAddress()+"\t"+ temp.getWebsiteAddress()+"\t"+ temp.getAction();
+			 String s= temp.getIpAddress()+"\t\t"+ temp.getWebsiteAddress()+"\t\t"+ temp.getAction();
 			 results.add(s);
 			}
 		}catch(SQLiteException se){

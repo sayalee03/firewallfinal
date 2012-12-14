@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddActivity extends Activity {
 
@@ -36,8 +38,8 @@ public class AddActivity extends Activity {
 		}
 		catch(Exception e){
 			//Catch the exception and thrown on the main screen
-			TextView text = (TextView) findViewById(R.id.textView);
-			text.setText("Exception: " + e.getMessage());
+			//TextView text = (TextView) findViewById(R.id.textView);
+			//text.setText("Exception: " + e.getMessage());
 		}
 	}
 
@@ -59,12 +61,7 @@ public class AddActivity extends Activity {
 				DatabaseManager dbm= new DatabaseManager(AddActivity.this);
 
 
-				if(!invalidIP(ipaddress)){
-					String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
-					throw new IllegalArgumentException(Error);
-				}
-
-				if(!invalidSite(website)){
+				if(!invalidIP(ipaddress) || !invalidSite(website)) {
 					String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
 					throw new IllegalArgumentException(Error);
 				}
@@ -111,8 +108,11 @@ public class AddActivity extends Activity {
 				dialog.show();
 			}
 			if(flag==1){
-				TextView text = (TextView) findViewById(R.id.textView);
-				text.setText(msg);
+				/*TextView text = (TextView) findViewById(R.id.textView);
+				text.setText(msg);*/
+				Toast.makeText(AddActivity.this,"Rule has been added!", Toast.LENGTH_LONG).show(); 
+				Intent i=new Intent(AddActivity.this, RulesActivity.class);
+				startActivity(i);
 			}
 		}
 

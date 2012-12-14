@@ -6,6 +6,7 @@ import java.util.Iterator;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DeleteActivity extends ListActivity {
 	private ArrayList<String> results = new ArrayList<String>();
@@ -89,6 +91,10 @@ public class DeleteActivity extends ListActivity {
 							newdialog.show();
 						}
 						
+						Toast.makeText(DeleteActivity.this,"Rule has been deleted!", Toast.LENGTH_LONG).show(); 
+						Intent i=new Intent(DeleteActivity.this, RulesActivity.class);
+						startActivity(i);
+						
 					}
 				});
 				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -111,7 +117,7 @@ public class DeleteActivity extends ListActivity {
 
 			while(itr.hasNext()){
 				Rule temp = itr.next();
-				String s= temp.getIpAddress()+"\t"+ temp.getWebsiteAddress()+"\t"+ temp.getAction();
+				String s= temp.getIpAddress()+"\t\t"+ temp.getWebsiteAddress()+"\t\t"+ temp.getAction();
 				results.add(s);
 			}
 		}catch(SQLiteException se){

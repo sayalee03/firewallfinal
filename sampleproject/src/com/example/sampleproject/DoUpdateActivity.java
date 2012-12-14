@@ -4,17 +4,17 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class DoUpdateActivity extends Activity {
 
@@ -44,8 +44,8 @@ public class DoUpdateActivity extends Activity {
 		}
 		catch(Exception e){
 			//Catch the exception and thrown on the main screen
-			TextView text = (TextView) findViewById(R.id.textView4);
-			text.setText("Exception: " + e.getMessage());
+			//TextView text = (TextView) findViewById(R.id.textView4);
+			//text.setText("Exception: " + e.getMessage());
 		}
 	}
 
@@ -65,15 +65,15 @@ public class DoUpdateActivity extends Activity {
 				DatabaseManager dbm= new DatabaseManager(DoUpdateActivity.this);
 
 
-				if(!invalidIP(ipaddress)){
+				if(!invalidIP(ipaddress) || !invalidSite(website)){
 					String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
 					throw new IllegalArgumentException(Error);
 				}
 
-				if(!invalidSite(website)){
+				/*if(!invalidSite(website)){
 					String Error = res.getString(R.string.INVALID_IPADDRESS_WEBSITE);
 					throw new IllegalArgumentException(Error);
-				}
+				}*/
 
 				rule.setIpAddress(ipaddress);
 				rule.setWebsiteAddress(website);
@@ -108,8 +108,11 @@ public class DoUpdateActivity extends Activity {
 			}
 			
 			if(flag==1){
-				TextView text = (TextView) findViewById(R.id.textView4);
-				text.setText(msg);
+				/*TextView text = (TextView) findViewById(R.id.textView4);
+				text.setText(msg);*/
+				Toast.makeText(DoUpdateActivity.this,"Rule has been updated!", Toast.LENGTH_LONG).show(); 
+				Intent i=new Intent(DoUpdateActivity.this, RulesActivity.class);
+				startActivity(i);
 			}
 			
 			if(flag==0){
