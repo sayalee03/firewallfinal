@@ -26,6 +26,7 @@ public class DoUpdateActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_do_update);
+		setTitle(Constants.UPDATE_RULE);
 		Bundle extras = getIntent().getExtras();
 		ruleid = extras.getInt("id");
 	}

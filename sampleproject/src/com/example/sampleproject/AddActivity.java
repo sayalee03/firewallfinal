@@ -22,6 +22,7 @@ public class AddActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add);
+		setTitle(Constants.ADD_RULE);
 	}
 
 	@Override

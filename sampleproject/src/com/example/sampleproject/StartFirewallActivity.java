@@ -185,7 +185,7 @@ public class StartFirewallActivity extends Activity {
 							}
 
 							if(error !=Constants.SECURITY_ERROR && allowed){
-								received += Constants.CONNECTED_TO_MESSAGE + website + "from" + securedSocket.getInetAddress()+"\n";
+								received += Constants.CONNECTED_TO_MESSAGE + website + " from " + securedSocket.getInetAddress()+"\n";
 
 								if(!sentSecurePassword.equals(actualPassword)){
 									throw new SecurityException();
@@ -210,7 +210,7 @@ public class StartFirewallActivity extends Activity {
 
 						catch(Exception e){
 							received += "Error while writing data";
-							received += e.getMessage();
+							
 						}
 						myUpdateHandler.sendMessage(msg);
 					}
@@ -230,8 +230,6 @@ public class StartFirewallActivity extends Activity {
 		protected void onPostExecute(Long result){
 			TextView tv = (TextView) findViewById(R.id.textView);
 			tv.setText(received);
-			Global gb= new Global();
-			gb.setLog(received);
 		}
 	}
 

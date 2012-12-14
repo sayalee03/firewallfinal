@@ -31,6 +31,7 @@ public class DeleteActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_delete);
+		setTitle(Constants.DELETE_RULE);
 
 		ProgressBar progressBar = new ProgressBar(this);
 		progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));

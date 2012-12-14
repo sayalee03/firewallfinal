@@ -22,6 +22,7 @@ public class ViewActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_view);
+		setTitle(Constants.VIEW_RULES);
 
 //		ProgressBar progressBar = new ProgressBar(this);
 //		progressBar.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT));

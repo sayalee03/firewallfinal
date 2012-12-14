@@ -29,4 +29,9 @@ public class Constants {
 
 	public static final String DELIMITER="^";
 	public static final String FINISHED_SENDING="END_OF_TRANSMISSION_FROM_WEBSITE";
+	
+	public static final String ADD_RULE = "Add Rule";
+	public static final String DELETE_RULE = "Delete Rule";
+	public static final String UPDATE_RULE = "Update Rule";
+	public static final String VIEW_RULES = "View Rules";
 }
